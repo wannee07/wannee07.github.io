@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>KNOCK KNOCK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #dce8fa;
+      font-family: 'Itim', cursive;
+      text-align: center;
+      padding-top: 100px;
+      margin: 0;
+    }
+ 
+    .envelope {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      margin: auto;
+      background-color: rgb(123, 182, 234);
+      border: 2px solid #95602a;
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(247, 247, 249, 0.4);
+      transition: transform 0.5s ease;
+      perspective: 800px;
+    }
+ 
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 300px;
+      height: 100px;
+      background-color: #95602a;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      box-shadow: inset 0 5px 15px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(255, 0, 128, 0.3);
+      transition: transform 0.6s ease;
+      transform-origin: top center;
+      border-bottom: 2px solid #e8ae6c;
+    }
+ 
+    .envelope.open .flap {
+      transform: rotateX(180deg);
+    }
+ 
+    /* ป๊อปอัปกระดาษ */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fffdf5;
+      padding: 30px;
+      border: 2px solid #b68665;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      width: 320px;
+      z-index: 10;
+      animation: pop 0.4s ease-out;
+    }
+ 
+    .image-gallery {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+ 
+    .image-gallery img {
+      width: 150px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px #ffb6c1aa;
+      transition: transform 0.3s ease;
+    }
+ 
+    .image-gallery img:hover {
+      transform: scale(1.05);
+    }
+ 
+    #loveImage {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: auto;
+    }
+ 
+    .love-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #9f55ff;
+      font-size: 1.3em;
+      z-index: 20;
+      pointer-events: none;
+    }
+ 
+    .love-message p {
+  white-space: nowrap;
+}
+ 
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+ 
+    @keyframes pop {
+      from {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+ 
+    .popup h2 {
+      margin: 0 0 15px;
+      color: #d63384;
+    }
+ 
+    .popup-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+ 
+    .popup button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.3s ease;
+      transform-origin: center;
+    }
+ 
+    .yes-btn {
+      background-color: #a962d9;
+      color: white;
+    }
+ 
+    .no-btn {
+      background-color: #ccc;
+      color: #333;
+    }
+ 
+    .click-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 8px 20px;
+      background-color: #8c5d34;
+      color: rgb(203, 237, 254);
+      border: none;
+      border-radius: 25px;
+      font-size: 1.2em;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.6);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      z-index: 2;
+    }
+ 
+    .click-btn:hover {
+      background-color: #a46e35;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+ 
+    #overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 5;
+    }
+ 
+    #loveImage {
+      display: none;
+      margin-top: 30px;
+      animation: fadeIn 1s ease forwards;
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: auto;
+    }
+ 
+    #loveImage img {
+      width: 200px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ffffffaa;
+    }
+ 
+    #loveImage p {
+      font-size: 1.5em;
+      color: #9962ff;
+      margin-top: 10px;
+    }
+ 
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+ 
+  <h1>Knock Knock</h1>
+  <h3>｡･✉️*｡</h3>
+ 
+  <!-- click me -->
+  <div class="envelope">
+    <div class="flap"></div>
+    <button class="click-btn" onclick="เปิดจดหมาย()">Click Me</button>
+  </div>
+ 
+  <!-- Overlay -->
+  <div id="overlay"></div>
+ 
+  <!-- Pop-up กระดาษ -->
+  <div id="popup" class="popup">
+    <h2>Will you be my Valentine ?</h2>
+    <p>🌬♡❕🚏*◞ˊˎ -</p>
+    <div class="popup-buttons">
+      <button class="yes-btn" onclick="ตอบตกลง()">Yes</button>
+      <button class="no-btn" onclick="ตอบปฏิเสธ()">No</button>
+    </div>
+  </div>
+ 
+  <!-- รูปน่ารักตอนตอบตกลง -->
+<div id="loveImage" style="position: relative; width: 300px; height: 300px; margin: auto;">
+    <div class="love-message" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 15px; color: #d63384; z-index: 15;">
+      <p>You are adorable to me i auan</p>
+      <p>ไปกินของอร่อย ๆ ด้วยกันเยอะ ๆ เลยนะ</p>
+      <p>˗ˏˋ 🥟꜆꜄🥞⤾·˚ ༘</p>  
+    </div>
+    <div id="orbitContainer" style="position: relative; width: 300px; height: 300px;">
+      <!-- รูปจะถูกสร้างด้วย JS -->
+    </div>
+  </div>
+  
+  
+  <script>
+    let shrinkCount = 0;
+    let currentScale = 1;
+ 
+    function เปิดจดหมาย() {
+      const envelope = document.querySelector(".envelope");
+      envelope.classList.add("open");
+ 
+      // ซ่อนปุ่มหลังคลิก
+      const btn = document.querySelector(".click-btn");
+      btn.style.display = 'none';
+ 
+      setTimeout(() => {
+        envelope.style.display = "none";
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+        document.querySelector('h1').style.display = 'none';
+        
+      }, 500);
+    }
+ 
+    function ตอบตกลง() {
+      document.getElementById("popup").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("loveImage").style.display = "block";
+      document.querySelector('h1').style.display = 'none';
+      
+    }
+    const orbitContainer = document.getElementById('orbitContainer');
+const radius = 120; // ระยะห่างจากกลาง
+const total = 10;   // จำนวนรูป
+let angle = 0;
+ 
+// อาเรย์เก็บ path รูป 10 รูป
+const imageSources = [
+  'img/กระจกนูน.jpg',
+  'img/เค้ก.jpg',
+  'img/สตกไอแพด.jpg',
+  'img/สตก.jpg',
+  'img/สยาม.jpg',
+  'img/IMG_7572.jpg',
+  'img/IMG_7573.jpg',
+  'img/IMG_7574.jpg',
+  'img/IMG_7576.jpg',
+  'img/IMG_7582.jpg'
+];
+ 
+// สร้างรูปใส่ใน container
+for(let i = 0; i < total; i++) {
+  const img = document.createElement('img');
+  img.src = imageSources[i];  // เอาชื่อภาพจากอาเรย์
+  img.style.width = '100px';
+  img.style.height = '100px';
+  img.style.borderRadius = '50%';
+  img.style.position = 'absolute';
+  orbitContainer.appendChild(img);
+}
+ 
+const images = orbitContainer.querySelectorAll('img');
+ 
+function animate() {
+  angle += 0.01; // ความเร็วหมุน
+ 
+  images.forEach((img, index) => {
+    const radius = 250; // ระยะห่างจากจุดศูนย์กลาง
+    // มุมแต่ละรูปห่างกันเท่าๆ กัน
+    const imgAngle = angle + (index * (2 * Math.PI / total));
+ 
+    // คำนวณตำแหน่ง x, y รอบวงกลม
+    const x = radius * Math.cos(imgAngle);
+    const y = radius * Math.sin(imgAngle);
+ 
+    // วางตำแหน่งรูปตาม x, y จากจุดศูนย์กลาง container (150,150)
+    img.style.left = `${150 + x - 50}px`;  // -25 คือครึ่งหนึ่งของขนาดรูป (50/2)
+    img.style.top = `${150 + y - 50}px`;
+ 
+    // ไม่หมุนรูปเอง (เอียงคงที่)
+    img.style.transform = 'rotate(0deg)';
+  });
+ 
+  requestAnimationFrame(animate);
+}
+ 
+animate();
+ 
+ 
+    function ตอบปฏิเสธ() {
+      if (shrinkCount < 10) {
+        shrinkCount++;
+        currentScale *= 0.9;
+        const noBtn = document.querySelector(".no-btn");
+        noBtn.style.transform = `scale(${currentScale})`;
+ 
+        setTimeout(() => {
+          if (shrinkCount === 10) {
+            noBtn.style.display = "none";
+          }
+          document.getElementById("popup").style.display = "none";
+          document.getElementById("overlay").style.display = "none";
+          document.querySelector('h1').style.display = 'none';
+ 
+          setTimeout(() => {
+            if (shrinkCount < 10) {
+              document.getElementById("popup").style.display = "block";
+              document.getElementById("overlay").style.display = "block";
+            }
+          }, 300);
+ 
+        }, 300);
+ 
+      } else {
+        const noBtn = document.querySelector(".no-btn");
+        noBtn.style.display = "none";
+        document.getElementById("popup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+      }
+    }
+  </script>
+ 
+</body>
+</html>
